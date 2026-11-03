@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SEO: replace https://www.ganeshpanda.com with your real domain; replace INSTALL_URL with the real install link -->
+<title>PandaPDF — AI-Powered PDF Tool by Ganesh Panda | Free Install</title>
+<meta name="description" content="PandaPDF is an intelligent PDF tool by Ganesh Panda. Merge, split, convert, compress and edit PDFs, and let AI summarise and answer questions about your documents.">
+<meta name="author" content="Ganesh Panda">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://www.ganeshpanda.com/pandapdf">
+<meta name="theme-color" content="#e8590c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e8590c'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-weight='700' font-size='26' fill='white'%3EPDF%3C/text%3E%3C/svg%3E">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ganesh Panda">
+<meta property="og:title" content="PandaPDF — AI-Powered PDF Tool">
+<meta property="og:description" content="Merge, split, convert and edit PDFs, with AI that understands what's inside.">
+<meta property="og:url" content="https://www.ganeshpanda.com/pandapdf">
+<meta property="og:image" content="https://www.ganeshpanda.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PandaPDF — AI-Powered PDF Tool">
+<meta name="twitter:description" content="Merge, split, convert and edit PDFs, with AI that understands what's inside.">
+<meta name="twitter:image" content="https://www.ganeshpanda.com/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "PandaPDF",
+      "url": "https://www.ganeshpanda.com/pandapdf",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Windows, macOS, Linux, Web",
+      "description": "AI-powered PDF tool to merge, split, convert, compress and edit PDFs, with AI summaries and document Q&A.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "downloadUrl": "INSTALL_URL",
+      "author": { "@type": "Person", "@id": "https://www.ganeshpanda.com/#person", "name": "Ganesh Panda", "url": "https://www.ganeshpanda.com/" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Is PandaPDF free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. PandaPDF is free to install and use." } },
+        { "@type": "Question", "name": "Are my files uploaded anywhere?", "acceptedAnswer": { "@type": "Answer", "text": "Core PDF tools run on your device, so your documents stay private." } },
+        { "@type": "Question", "name": "What can the AI do?", "acceptedAnswer": { "@type": "Answer", "text": "PandaPDF's AI can summarise long documents, answer questions about their content and pull out key information." } }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Ganesh Panda", "item": "https://www.ganeshpanda.com/" },
+        { "@type": "ListItem", "position": 2, "name": "PandaPDF", "item": "https://www.ganeshpanda.com/pandapdf" }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --surface: #ffffff;
+    --text: #17181c;
+    --muted: #5d6170;
+    --line: #e6e5df;
+    --accent: #e8590c;
+    --accent-soft: #fff1e8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1013;
+      --surface: #17191e;
+      --text: #f1f1ee;
+      --muted: #a2a5b0;
+      --line: #2a2d34;
+      --accent: #ff8a3d;
+      --accent-soft: #2a1a10;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1013;
+    --surface: #17191e;
+    --text: #f1f1ee;
+    --muted: #a2a5b0;
+    --line: #2a2d34;
+    --accent: #ff8a3d;
+    --accent-soft: #2a1a10;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  @media (min-width: 720px) { .wrap { padding: 0 32px; } }
+
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  header nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font: 700 20px "Space Grotesk", sans-serif; text-decoration: none; letter-spacing: -0.02em; }
+  .logo span { color: var(--accent); }
+  .links { display: flex; gap: 4px; align-items: center; }
+  .links a {
+    text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 500;
+    padding: 6px 10px; border-radius: 8px;
+  }
+  .links a:hover { color: var(--text); background: var(--surface); }
+  .links a.install-sm { background: var(--accent); color: #fff; }
+  .theme-btn {
+    border: 1px solid var(--line); background: var(--surface); color: var(--text);
+    width: 36px; height: 36px; border-radius: 10px; cursor: pointer; font-size: 16px; margin-left: 6px;
+  }
+  @media (max-width: 600px) { .links a.hide-sm { display: none; } }
+
+  .crumbs { font-size: 14px; color: var(--muted); padding-top: 28px; }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { color: var(--accent); }
+
+  /* Hero */
+  .hero { padding: 40px 0 80px; display: grid; gap: 48px; align-items: center; }
+  @media (min-width: 860px) { .hero { grid-template-columns: 1.2fr 1fr; padding: 56px 0 96px; } }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px;
+  }
+  h1 {
+    font: 700 clamp(44px, 8vw, 80px)/1.02 "Space Grotesk", sans-serif;
+    letter-spacing: -0.04em; margin: 20px 0;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lead { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 560px; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; font-size: 15px;
+    padding: 13px 22px; border-radius: 12px; border: 1px solid var(--line);
+    transition: transform .15s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); font-size: 16px; padding: 15px 26px; }
+  .btn svg { width: 18px; height: 18px; }
+  .note { font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+  /* Product mock */
+  .mock {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,.35); overflow: hidden;
+  }
+  .mock-bar { display: flex; gap: 6px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  .mock-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+  .mock-body { padding: 20px; display: grid; gap: 14px; }
+  .doc {
+    display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px;
+  }
+  .doc .ico {
+    width: 36px; height: 44px; border-radius: 6px; background: var(--accent-soft); color: var(--accent);
+    display: grid; place-items: center; font: 700 10px Inter, sans-serif; flex: none;
+  }
+  .doc b { display: block; font-size: 14px; }
+  .doc span { font-size: 12px; color: var(--muted); }
+  .ai {
+    background: var(--accent-soft); border-radius: 12px; padding: 14px; font-size: 14px;
+  }
+  .ai strong { color: var(--accent); display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+  .tools { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tools span { font-size: 12px; font-weight: 500; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line); color: var(--muted); }
+
+  section { padding: 72px 0; border-top: 1px solid var(--line); }
+  .eyebrow { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); }
+  h2 { font: 700 clamp(30px, 5vw, 42px)/1.1 "Space Grotesk", sans-serif; letter-spacing: -0.03em; margin: 10px 0 32px; }
+
+  .grid { display: grid; gap: 16px; }
+  @media (min-width: 720px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+    padding: 24px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .card .icon {
+    width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+    background: var(--accent-soft); color: var(--accent); font-size: 20px;
+  }
+  .card h3 { font: 700 19px "Space Grotesk", sans-serif; letter-spacing: -0.02em; }
+  .card p { color: var(--muted); font-size: 15px; }
+
+  .steps { display: grid; gap: 16px; counter-reset: step; }
+  @media (min-width: 720px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+  .step { padding: 24px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 16px 16px 0; }
+  .step::before {
+    counter-increment: step; content: "0" counter(step);
+    font: 700 28px "Space Grotesk", sans-serif; color: var(--accent); display: block; margin-bottom: 6px;
+  }
+  .step h3 { font-size: 17px; margin-bottom: 4px; }
+  .step p { color: var(--muted); font-size: 15px; }
+
+  .faq { display: grid; gap: 10px; max-width: 760px; }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+  summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--accent); font-size: 20px; line-height: 1; }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--muted); margin-top: 10px; font-size: 15px; }
+
+  .install {
+    background: var(--text); color: var(--bg); border-radius: 24px;
+    padding: clamp(32px, 6vw, 64px); text-align: center;
+  }
+  .install h2 { margin: 0 0 12px; }
+  .install p { opacity: .7; margin-bottom: 28px; }
+  .install .note { color: inherit; opacity: .6; }
+
+  footer { padding: 32px 0 48px; color: var(--muted); font-size: 14px; text-align: center; }
+  footer a { text-decoration: none; color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="/" class="logo" aria-label="Ganesh Panda — home">ganesh<span>.</span>panda</a>
+    <div class="links">
+      <a href="#features" class="hide-sm">Features</a>
+      <a href="#how" class="hide-sm">How it works</a>
+      <a href="#faq" class="hide-sm">FAQ</a>
+      <a href="#install" class="install-sm">Install</a>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">◐</button>
+    </div>
+  </nav>
+</header>
+
+<main class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Ganesh Panda</a> / <a href="/#products">Products</a> / PandaPDF</nav>
+
+  <div class="hero">
+    <div>
+      <span class="badge">Free · AI-powered</span>
+      <h1>Panda<em>PDF</em></h1>
+      <p class="lead">The intelligent PDF tool. Merge, split, convert, compress and edit your PDFs in seconds, then let AI summarise them and answer your questions about what's inside.</p>
+      <div class="cta">
+        <a href="INSTALL_URL" class="btn primary" id="installBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Install PandaPDF
+        </a>
+        <a href="#features" class="btn">See features</a>
+      </div>
+      <p class="note">Free to use. Your files stay on your device.</p>
+    </div>
+
+    <div class="mock" aria-hidden="true">
+      <div class="mock-bar"><i></i><i></i><i></i></div>
+      <div class="mock-body">
+        <div class="doc"><div class="ico">PDF</div><div><b>Annual-Report-2026.pdf</b><span>48 pages · 3.2 MB</span></div></div>
+        <div class="tools"><span>Merge</span><span>Split</span><span>Compress</span><span>Convert</span><span>Edit</span><span>Sign</span></div>
+        <div class="ai"><strong>AI summary</strong>Revenue grew 32% year on year, led by the AI division. Key risks are listed on pages 31–34.</div>
+        <div class="doc"><div class="ico">DOCX</div><div><b>Annual-Report-2026.docx</b><span>Converted · ready to download</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="eyebrow">Features</div>
+    <h2>Everything you need for PDFs.</h2>
+    <div class="grid">
+      <article class="card"><div class="icon">✨</div><h3>AI summaries</h3><p>Turn long reports, contracts and papers into a clear summary in seconds.</p></article>
+      <article class="card"><div class="icon">💬</div><h3>Chat with your PDF</h3><p>Ask questions in plain language and get answers from your document.</p></article>
+      <article class="card"><div class="icon">🧩</div><h3>Merge &amp; split</h3><p>Combine files into one or pull out exactly the pages you need.</p></article>
+      <article class="card"><div class="icon">🔄</div><h3>Convert anything</h3><p>PDF to Word, Excel, images and back again, with layouts kept intact.</p></article>
+      <article class="card"><div class="icon">🗜️</div><h3>Compress</h3><p>Shrink file sizes for email and uploads without losing quality.</p></article>
+      <article class="card"><div class="icon">🔒</div><h3>Private by design</h3><p>Core tools run on your device, so sensitive documents stay with you.</p></article>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="eyebrow">How it works</div>
+    <h2>Up and running in a minute.</h2>
+    <div class="steps">
+      <div class="step"><h3>Install PandaPDF</h3><p>Click Install and add it to your device in one step.</p></div>
+      <div class="step"><h3>Drop in your PDF</h3><p>Drag a file in or open it from your computer.</p></div>
+      <div class="step"><h3>Pick a tool or ask AI</h3><p>Edit, convert or compress, or ask AI to summarise and explain.</p></div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="eyebrow">FAQ</div>
+    <h2>Questions, answered.</h2>
+    <div class="faq">
+      <details><summary>Is PandaPDF free?</summary><p>Yes. PandaPDF is free to install and use.</p></details>
+      <details><summary>Are my files uploaded anywhere?</summary><p>Core PDF tools run on your device, so your documents stay private.</p></details>
+      <details><summary>What can the AI do?</summary><p>PandaPDF's AI can summarise long documents, answer questions about their content and pull out key information.</p></details>
+      <details><summary>Who built PandaPDF?</summary><p>PandaPDF is built by <a href="/">Ganesh Panda</a>, a builder and leader creating AI-first products.</p></details>
+    </div>
+  </section>
+
+  <section id="install" style="border-top:0">
+    <div class="install">
+      <h2>Get PandaPDF today.</h2>
+      <p>Free, fast and AI-powered. Your PDFs will never be the same.</p>
+      <a href="INSTALL_URL" class="btn primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        Install PandaPDF
+      </a>
+      <p class="note">Works on Windows, macOS, Linux and the web.</p>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> PandaPDF · Built by <a href="/">Ganesh Panda</a></footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const dark = root.dataset.theme
+      ? root.dataset.theme === 'dark'
+      : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  });
+</script>
+</body>
+</html>
