@@ -252,7 +252,7 @@
   .pulse::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #22c55e; animation: ping 2s var(--ease) infinite; }
   @keyframes ping { to { transform: scale(3); opacity: 0; } }
   .hi { margin: 28px 0 10px; font: 500 clamp(18px, 2.4vw, 24px) "Space Grotesk", sans-serif; color: var(--muted); letter-spacing: -0.01em; }
-  .hero h1 { font: 700 clamp(52px, 10.5vw, 136px)/.95 "Space Grotesk", sans-serif; letter-spacing: -0.055em; }
+  .hero .hero-title { font: 700 clamp(52px, 10.5vw, 136px)/.95 "Space Grotesk", sans-serif; letter-spacing: -0.055em; }
   .line { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
   .line > span { display: inline-block; }
   .rotator { display: inline-grid; vertical-align: bottom; }
@@ -521,11 +521,11 @@
     <div class="wrap hero-grid">
       <div>
         <span class="pill hero-in"><span class="pulse"></span>Building the AI-first future</span>
-        <p class="hi hero-in">Hi, I'm Ganesh Panda.</p>
-        <h1 aria-label="I build AI products.">
+        <h1 class="hi hero-in">Hi, I'm Ganesh Panda.</h1>
+        <p class="hero-title" aria-label="I build AI products.">
           <span class="line"><span>I build AI</span></span>
           <span class="line"><span><span class="rotator" id="rotator" aria-hidden="true"><span class="on">products.</span><span>agents.</span><span>platforms.</span><span>the future.</span></span></span></span>
-        </h1>
+        </p>
         <p class="lead hero-in">Builder and leader creating AI-first products, from autonomous agents to intelligent document and finance tools. I turn the latest in AI into products people actually use.</p>
         <div class="cta hero-in">
           <a href="#products" class="btn primary magnetic">See my work <span class="arr">→</span></a>
@@ -944,12 +944,12 @@
   }));
 
   // Hero intro
-  gsap.set('.hero h1 .line > span', { yPercent: 115 });
+  gsap.set('.hero .hero-title .line > span', { yPercent: 115 });
   gsap.set('.hero-in', { opacity: 0, y: 24 });
   gsap.set('.hero-portrait', { opacity: 0, scale: .92, y: 30 });
   hideLoader(() => {
     gsap.timeline({ defaults: { ease: 'expo.out' } })
-      .to('.hero h1 .line > span', { yPercent: 0, duration: 1.4, stagger: .12 })
+      .to('.hero .hero-title .line > span', { yPercent: 0, duration: 1.4, stagger: .12 })
       .to('.hero-in', { opacity: 1, y: 0, duration: 1.1, stagger: .08 }, .15)
       .to('.hero-portrait', { opacity: 1, scale: 1, y: 0, duration: 1.6 }, .2);
   });

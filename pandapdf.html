@@ -126,6 +126,9 @@
     border: 1px solid var(--line); background: var(--surface); color: var(--text);
     width: 36px; height: 36px; border-radius: 10px; cursor: pointer; font-size: 16px; margin-left: 6px;
   }
+  .links a { white-space: nowrap; }
+  /* Medium screens: keep Use online, Features and Install; wide screens show every section. */
+  @media (max-width: 1100px) { .links a.hide-md { display: none; } }
   @media (max-width: 600px) { .links a.hide-sm { display: none; } }
 
   .crumbs { font-size: 14px; color: var(--muted); padding-top: 28px; }
@@ -387,6 +390,20 @@
   .vp-chapters button { padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); background: transparent; color: #c9c9d1; font: 500 12px Inter, sans-serif; cursor: pointer; }
   .vp-chapters button.cur { background: #e8590c; border-color: #e8590c; color: #fff; }
   .vp-note { font-size: 13px; color: var(--muted); margin-top: 12px; }
+
+  /* online app (the PandaPDF web build, loaded on demand) */
+  .online-lead { color: var(--muted); font-size: 17px; max-width: 680px; margin: -16px 0 24px; }
+  .online-frame { position: relative; height: min(78vh, 760px); min-height: 460px; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 60px -30px rgba(0,0,0,.35); }
+  .online-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .online-start { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; text-align: center; padding: 24px;
+    background: radial-gradient(80% 70% at 50% 0%, var(--accent-soft), transparent 70%); }
+  .online-start .big-ico { width: 72px; height: 72px; border-radius: 20px; background: linear-gradient(135deg, #ff7a2e, #e0367a 60%, #9b6bff); display: grid; place-items: center; font: 700 22px "Space Grotesk", sans-serif; color: #fff; margin-bottom: 6px; }
+  .online-start b { font: 700 24px "Space Grotesk", sans-serif; letter-spacing: -0.02em; }
+  .online-start span { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
+  .online-start .btn { cursor: pointer; font: inherit; font-weight: 600; }
+  .online-full { font-size: 13px; color: var(--muted); }
+  .online-full:hover { color: var(--accent); }
+  .online-ticks { display: flex; flex-wrap: wrap; gap: 10px 24px; }
   .vp-hint { position: absolute; right: 14px; top: 14px; z-index: 80; display: none; padding: 9px 14px; border-radius: 999px; border: 0; background: #fff; color: #111; font: 600 13px Inter, sans-serif; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.4); animation: hintPulse 2s ease-in-out infinite; }
   .vp.playing.needs-sound .vp-hint { display: block; }
   @keyframes hintPulse { 50% { transform: scale(1.06); } }
@@ -471,12 +488,13 @@
   <nav class="wrap">
     <a href="/" class="logo" aria-label="Ganesh Panda — home">ganesh<span>.</span>panda</a>
     <div class="links">
-      <a href="#video" class="hide-sm">Watch guide</a>
-      <a href="#compare" class="hide-sm">Compare</a>
+      <a href="#online" class="hide-sm">Use online</a>
+      <a href="#video" class="hide-sm hide-md">Watch guide</a>
+      <a href="#compare" class="hide-sm hide-md">Compare</a>
       <a href="#features" class="hide-sm">Features</a>
-      <a href="#how" class="hide-sm">How it works</a>
-      <a href="#free" class="hide-sm">Pricing</a>
-      <a href="#faq" class="hide-sm">FAQ</a>
+      <a href="#how" class="hide-sm hide-md">How it works</a>
+      <a href="#free" class="hide-sm hide-md">Pricing</a>
+      <a href="#faq" class="hide-sm hide-md">FAQ</a>
       <a href="#install" class="install-sm">Install</a>
       <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">◐</button>
     </div>
@@ -496,7 +514,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
           Install PandaPDF
         </a>
-        <a href="#features" class="btn">See features</a>
+        <a href="#online" class="btn">Use online, no download</a>
       </div>
       <p class="note">Free download for Windows (64-bit), v0.17.0. No license fee. Your files stay on your device.</p>
       <div class="dl-thanks" role="status" aria-live="polite">
@@ -520,6 +538,26 @@
       </div>
     </div>
   </div>
+
+  <section id="online">
+    <div class="eyebrow">No download needed</div>
+    <h2>Use PandaPDF online.</h2>
+    <p class="online-lead">The full PandaPDF app runs right here in your browser: read, search, organize pages, combine, split, fill forms and password-protect. Your PDFs are processed on your own device and are never uploaded.</p>
+    <div class="online-frame" id="onlineFrame">
+      <div class="online-start" id="onlineStart">
+        <div class="big-ico">PDF</div>
+        <b>Start PandaPDF online</b>
+        <span>Free · about 17 MB, downloads once · works best on a computer</span>
+        <button class="btn primary" id="onlineBtn" type="button">Open the app here</button>
+        <a href="/pandapdf-online/" target="_blank" rel="noopener" class="online-full">or open it full screen in a new tab ↗</a>
+      </div>
+    </div>
+    <ul class="ticks online-ticks">
+      <li>Nothing to install, no account</li>
+      <li>Files stay on your device, nothing is uploaded</li>
+      <li>Works in Chrome, Edge, Firefox and Safari</li>
+    </ul>
+  </section>
 
   <section id="video">
     <div class="eyebrow">Video guide</div>
@@ -919,6 +957,18 @@
       : matchMedia('(prefers-color-scheme: dark)').matches;
     root.dataset.theme = dark ? 'light' : 'dark';
     try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  });
+
+  /* ---------- Online app: load the PandaPDF web build (about 17 MB) only when someone asks for it ---------- */
+  document.getElementById('onlineBtn').addEventListener('click', () => {
+    const f = document.createElement('iframe');
+    f.src = '/pandapdf-online/';
+    f.title = 'PandaPDF online';
+    f.allow = 'fullscreen; clipboard-read; clipboard-write';
+    f.allowFullscreen = true;
+    document.getElementById('onlineFrame').appendChild(f);
+    document.getElementById('onlineStart').remove();
+    players.forEach(p => p.pause());   // stop a playing video so its sound doesn't run over the app
   });
 
   /* ---------- Background music: a soft ambient loop generated with Web Audio (no audio files) ---------- */
