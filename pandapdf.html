@@ -91,6 +91,9 @@
     --accent-soft: #2a1a10;
   }
 
+  /* smooth crossfade to and from the homepage (Chrome, Edge, Safari 18.2+) */
+  @view-transition { navigation: auto; }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
@@ -106,7 +109,7 @@
   header {
     position: sticky; top: 0; z-index: 10;
     background: color-mix(in srgb, var(--bg) 85%, transparent);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--line);
   }
   header nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
@@ -239,6 +242,201 @@
   .install p { opacity: .7; margin-bottom: 28px; }
   .install .note { color: inherit; opacity: .6; }
 
+  /* ---------- Install & use video ---------- */
+  .vp { border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: #0b0b10; box-shadow: 0 40px 80px -40px rgba(0,0,0,.5); }
+  .vp-stage { position: relative; aspect-ratio: 16 / 9; overflow: hidden; cursor: pointer;
+    background: radial-gradient(120% 90% at 85% 0%, #3a1a0a 0%, transparent 55%), radial-gradient(90% 80% at 0% 100%, #22163d 0%, transparent 60%), #0b0b10; }
+  .vp-canvas { position: absolute; left: 0; top: 0; width: 960px; height: 540px; transform-origin: 0 0; color: #f3f2ee; font: 14px/1.4 Inter, system-ui, sans-serif; }
+  .vp-canvas * { box-sizing: border-box; }
+  .sc { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .45s, visibility .45s; }
+  .sc.active { opacity: 1; visibility: visible; }
+  .fx { opacity: 0; transform: translateY(14px); transition: opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1); }
+  .fx.on { opacity: 1; transform: none; }
+  .fx.gone { opacity: 0 !important; transform: scale(.96) !important; pointer-events: none; }
+  .pop { opacity: 0; transform: scale(.9); transition: opacity .35s, transform .45s cubic-bezier(.34,1.56,.64,1); }
+  .pop.on { opacity: 1; transform: none; }
+  .pop.gone { opacity: 0; transform: scale(.9); }
+
+  /* cursor */
+  .vp-cursor { position: absolute; left: 0; top: 0; width: 22px; height: 22px; z-index: 50; pointer-events: none; transition: opacity .3s; }
+  .vp-cursor svg { width: 22px; height: 22px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
+  .vp-cursor::before { content: ""; position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #ff8a3d; opacity: 0; transform: scale(.3); }
+  .vp-cursor.click::before { animation: vpclick .45s ease-out; }
+  @keyframes vpclick { 0% { opacity: 1; transform: scale(.3); } 100% { opacity: 0; transform: scale(1.6); } }
+
+  /* shared window chrome */
+  .win { position: absolute; background: #f6f6f4; color: #1b1b20; border-radius: 10px; overflow: hidden; box-shadow: 0 30px 70px -20px rgba(0,0,0,.7); }
+  .win-bar { height: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: #e9e8e4; font-size: 12px; color: #444; }
+  .win-bar .ctl { display: flex; gap: 14px; color: #666; letter-spacing: 2px; }
+  .win-bar .ttl { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+  .app-ico { width: 18px; height: 18px; border-radius: 5px; background: #e8590c; color: #fff; font: 700 8px/18px Inter, sans-serif; text-align: center; }
+  .wbtn { display: inline-flex; align-items: center; justify-content: center; padding: 7px 20px; border-radius: 5px; border: 1px solid #bbb; background: #fff; font-size: 13px; color: #1b1b20; }
+  .wbtn.pri { background: #0067c0; border-color: #0067c0; color: #fff; }
+  .chk { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .chk i { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid #777; display: grid; place-items: center; font-style: normal; font-size: 11px; color: #fff; transition: background .2s, border-color .2s; }
+  .chk.on i { background: #0067c0; border-color: #0067c0; }
+  .chk.on i::before { content: "✓"; }
+  .radio i { border-radius: 50%; }
+  .radio.on i { background: #fff; border-color: #0067c0; }
+  .radio.on i::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #0067c0; }
+  .bar { height: 6px; border-radius: 6px; background: #ddd; overflow: hidden; }
+  .bar b { display: block; height: 100%; width: 0; background: #0067c0; border-radius: 6px; }
+
+  /* title + outro */
+  .title-wrap { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 18px; }
+  .big-ico { width: 96px; height: 96px; margin: 0 auto; border-radius: 26px; background: linear-gradient(135deg, #ff7a2e, #e0367a 60%, #9b6bff); display: grid; place-items: center; font: 700 30px "Space Grotesk", sans-serif; color: #fff; box-shadow: 0 20px 60px -10px rgba(255,122,46,.6); }
+  .t-h { font: 700 64px/1 "Space Grotesk", sans-serif; letter-spacing: -0.04em; }
+  .t-h em { font-style: normal; color: #ff8a3d; }
+  .t-s { font-size: 20px; color: #a9abb8; }
+  .t-pills { display: flex; gap: 10px; justify-content: center; }
+  .t-pills span { padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.15); font-size: 14px; color: #d8d8de; }
+
+  /* browser */
+  .addr { margin: 8px 12px; padding: 6px 12px; border-radius: 999px; background: #fff; font-size: 12px; color: #555; border: 1px solid #ddd; }
+  .v-dlbtn { position: absolute; left: 70px; top: 255px; display: inline-flex; gap: 10px; align-items: center; padding: 14px 24px; border-radius: 12px; background: #e8590c; color: #fff; font-weight: 600; font-size: 16px; }
+  .dl-pop { position: absolute; left: 520px; top: 92px; width: 330px; padding: 14px; border-radius: 10px; background: #fff; color: #1b1b20; box-shadow: 0 20px 50px -10px rgba(0,0,0,.45); border: 1px solid #ddd; }
+  .dl-pop .row { display: flex; gap: 10px; align-items: center; }
+  .exe { width: 34px; height: 34px; border-radius: 8px; background: #e8590c; color: #fff; display: grid; place-items: center; font: 700 9px Inter, sans-serif; flex: none; }
+  .dl-pop b { font-size: 12px; display: block; }
+  .dl-pop small { font-size: 11px; color: #777; }
+  .dl-pop .open { margin-top: 10px; font-size: 12px; color: #0067c0; font-weight: 600; }
+
+  /* smartscreen */
+  .ss { position: absolute; left: 170px; top: 60px; width: 620px; height: 420px; background: #0063b1; color: #fff; padding: 40px 44px; box-shadow: 0 30px 70px -20px rgba(0,0,0,.7); }
+  .ss h4 { font: 300 30px "Segoe UI", Inter, sans-serif; margin-bottom: 18px; }
+  .ss p { font-size: 14px; opacity: .9; max-width: 480px; }
+  .ss .more { margin-top: 18px; font-size: 14px; text-decoration: underline; }
+  .ss .det { margin-top: 18px; font-size: 13px; opacity: .9; line-height: 1.7; }
+  .ss .btns { position: absolute; right: 30px; bottom: 26px; display: flex; gap: 10px; }
+  .ss .btns span { padding: 8px 22px; border: 2px solid #fff; font-size: 14px; }
+  .ss .btns span.alt { background: #fff; color: #0063b1; }
+
+  /* setup wizard */
+  .wiz { left: 190px; top: 50px; width: 580px; height: 440px; }
+  .wiz-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; background: #fff; border-bottom: 1px solid #ddd; }
+  .wiz-head b { font-size: 15px; display: block; }
+  .wiz-head small { font-size: 12px; color: #666; }
+  .wiz-pg { position: absolute; left: 0; right: 0; top: 108px; bottom: 60px; padding: 18px 26px; display: flex; flex-direction: column; gap: 12px; font-size: 13px; }
+  .wiz-pg .lic { height: 120px; padding: 10px; background: #fff; border: 1px solid #ccc; font-size: 11px; color: #555; overflow: hidden; }
+  .wiz-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 60px; display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 0 22px; border-top: 1px solid #ddd; }
+  .wiz-pg h5 { font-size: 15px; }
+  .wiz-pg .muted { color: #666; font-size: 12px; }
+
+  /* app */
+  .app { left: 40px; top: 26px; width: 880px; height: 488px; }
+  .app-tools { display: flex; gap: 6px; padding: 8px 12px; background: #fff; border-bottom: 1px solid #e3e3e3; font-size: 12px; color: #444; }
+  .app-tools span { padding: 5px 10px; border-radius: 6px; }
+  .app-tools span.hot { background: #fff1e8; color: #e8590c; font-weight: 600; }
+  .app-body { position: absolute; left: 0; right: 0; top: 76px; bottom: 0; display: flex; background: #e4e3df; }
+  .side { width: 130px; padding: 12px; display: flex; flex-direction: column; gap: 10px; background: #efeeea; border-right: 1px solid #ddd; }
+  .thumb { height: 76px; border-radius: 4px; background: #fff; border: 1px solid #d8d8d8; padding: 8px 7px; }
+  .thumb.sel { outline: 2px solid #e8590c; }
+  .thumb i { display: block; height: 3px; border-radius: 2px; background: #ddd; margin-bottom: 5px; }
+  .page { margin: 16px auto; width: 380px; background: #fff; border-radius: 3px; padding: 34px 36px; box-shadow: 0 6px 20px rgba(0,0,0,.12); align-self: flex-start; }
+  .page .h { height: 14px; width: 55%; background: #333; border-radius: 3px; margin-bottom: 20px; }
+  .page .l { height: 7px; background: #d6d6d6; border-radius: 3px; margin-bottom: 11px; position: relative; }
+  .page .l mark { position: absolute; top: -3px; height: 13px; border-radius: 3px; background: rgba(255,200,0,.75); width: 0; transition: width .4s; }
+  .page .l mark.on { width: 54px; }
+  .empty { position: absolute; inset: 0; display: grid; place-content: center; gap: 12px; text-align: center; color: #666; }
+  .empty .drop { width: 300px; height: 170px; margin: 0 auto; border: 2px dashed #bbb; border-radius: 14px; display: grid; place-content: center; gap: 6px; }
+  .key { display: inline-block; padding: 2px 7px; border-radius: 5px; border: 1px solid #bbb; border-bottom-width: 2px; background: #fff; font: 600 11px Inter, sans-serif; color: #333; }
+  .file-chip { position: absolute; left: 820px; top: 470px; display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 10px; background: #fff; color: #1b1b20; font-size: 12px; font-weight: 600; box-shadow: 0 14px 30px -8px rgba(0,0,0,.5); z-index: 5; transition: left 1.6s cubic-bezier(.65,0,.35,1), top 1.6s cubic-bezier(.65,0,.35,1), opacity .3s; }
+  .file-chip.on { left: 400px; top: 270px; }
+  .file-chip .exe { width: 26px; height: 30px; font-size: 8px; }
+  .search { position: absolute; right: 18px; top: 86px; width: 290px; display: flex; gap: 8px; align-items: center; padding: 8px 12px; background: #fff; border-radius: 8px; border: 1px solid #d0d0d0; box-shadow: 0 10px 24px -8px rgba(0,0,0,.3); font-size: 13px; z-index: 3; }
+  .search .typed { flex: 1; color: #1b1b20; }
+  .search .typed::after { content: "|"; color: #e8590c; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .search small { color: #888; font-size: 11px; }
+  .grid-pages { position: absolute; left: 0; right: 0; top: 76px; bottom: 0; background: #e4e3df; display: grid; grid-template-columns: repeat(6, 1fr); gap: 22px; padding: 70px 40px; align-content: start; }
+  .gp { position: relative; height: 170px; background: #fff; border-radius: 4px; box-shadow: 0 6px 16px rgba(0,0,0,.12); padding: 14px 12px; transition: transform .7s cubic-bezier(.22,1,.36,1), opacity .5s; }
+  .gp i { display: block; height: 5px; border-radius: 3px; background: #ddd; margin-bottom: 8px; }
+  .gp .n { position: absolute; bottom: -22px; left: 0; right: 0; text-align: center; font-size: 11px; color: #666; }
+  .gp.rot.on { transform: rotate(90deg) scale(.82); }
+  .gp.del.on { opacity: 0; transform: scale(.6); }
+  .gp.sel { outline: 2px solid #e8590c; }
+  .toast { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); padding: 10px 16px; border-radius: 10px; background: #1b1b20; color: #fff; font-size: 13px; display: flex; gap: 14px; z-index: 4; }
+  .toast b { color: #ff8a3d; }
+  .merge { position: absolute; left: 70px; top: 120px; width: 380px; height: 300px; }
+  .mfile { position: absolute; width: 160px; padding: 14px; border-radius: 12px; background: #fff; color: #1b1b20; font-size: 12px; font-weight: 600; box-shadow: 0 16px 34px -10px rgba(0,0,0,.5); display: flex; gap: 10px; align-items: center; transition: left .9s cubic-bezier(.65,0,.35,1), top .9s cubic-bezier(.65,0,.35,1), opacity .4s; }
+  .mfile.a { left: 0; top: 30px; } .mfile.b { left: 220px; top: 30px; }
+  .mfile.a.on { left: 110px; top: 60px; opacity: 0; } .mfile.b.on { left: 110px; top: 60px; opacity: 0; }
+  .mfile.c { left: 90px; top: 140px; width: 200px; }
+  .lock { position: absolute; left: 520px; top: 110px; width: 360px; padding: 22px; border-radius: 14px; background: #fff; color: #1b1b20; box-shadow: 0 20px 50px -10px rgba(0,0,0,.5); display: grid; gap: 12px; }
+  .lock h5 { font-size: 16px; display: flex; gap: 8px; align-items: center; }
+  .lock .inp { padding: 9px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; letter-spacing: 3px; min-height: 40px; }
+  .lock .ok { display: flex; gap: 8px; align-items: center; font-size: 12px; color: #15803d; font-weight: 600; }
+  .sc-label { position: absolute; left: 40px; top: 30px; font: 600 12px Inter, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #ff8a3d; }
+
+  /* player chrome */
+  .vp-cap { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); max-width: 86%; padding: 8px 16px; border-radius: 10px; background: rgba(0,0,0,.72); color: #fff; font-size: clamp(12px, 1.6vw, 15px); text-align: center; z-index: 60; pointer-events: none; transition: opacity .3s; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .vp-cap:empty { opacity: 0; }
+  .vp-big { position: absolute; inset: 0; display: grid; place-items: center; z-index: 70; background: rgba(0,0,0,.35); border: 0; cursor: pointer; transition: opacity .3s; }
+  .vp-big span { width: 84px; height: 84px; border-radius: 50%; background: #e8590c; display: grid; place-items: center; box-shadow: 0 10px 40px rgba(232,89,12,.6); }
+  .vp-big svg { width: 34px; height: 34px; margin-left: 5px; fill: #fff; }
+  .vp.playing .vp-big { opacity: 0; pointer-events: none; }
+  .vp-ctrl { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #121218; color: #e6e6ea; font-size: 13px; }
+  .vp-ctrl button { width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(255,255,255,.1); color: #fff; cursor: pointer; display: grid; place-items: center; flex: none; }
+  .vp-ctrl button:hover { background: rgba(255,255,255,.2); }
+  .vp-ctrl svg { width: 14px; height: 14px; fill: currentColor; }
+  .vp-track { position: relative; flex: 1; height: 6px; border-radius: 6px; background: rgba(255,255,255,.15); cursor: pointer; }
+  .vp-track b { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 6px; background: linear-gradient(90deg, #ff7a2e, #e0367a, #9b6bff); }
+  .vp-track i { position: absolute; top: -3px; width: 2px; height: 12px; background: rgba(255,255,255,.45); }
+  .vp-time { font-variant-numeric: tabular-nums; color: #a9abb8; flex: none; }
+  .vp-chapters { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 14px 14px; background: #121218; }
+  .vp-chapters button { padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); background: transparent; color: #c9c9d1; font: 500 12px Inter, sans-serif; cursor: pointer; }
+  .vp-chapters button.cur { background: #e8590c; border-color: #e8590c; color: #fff; }
+  .vp-note { font-size: 13px; color: var(--muted); margin-top: 12px; }
+  .vp-hint { position: absolute; right: 14px; top: 14px; z-index: 80; display: none; padding: 9px 14px; border-radius: 999px; border: 0; background: #fff; color: #111; font: 600 13px Inter, sans-serif; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,.4); animation: hintPulse 2s ease-in-out infinite; }
+  .vp.playing.needs-sound .vp-hint { display: block; }
+  @keyframes hintPulse { 50% { transform: scale(1.06); } }
+  .vp-ctrl .vp-mute svg { width: 18px; height: 18px; }
+
+  /* comparison video scenes */
+  .c-h { position: absolute; left: 60px; top: 46px; font: 700 34px/1.1 "Space Grotesk", sans-serif; letter-spacing: -0.03em; }
+  .c-h em { font-style: normal; color: #ff8a3d; }
+  .bars { position: absolute; left: 60px; right: 60px; top: 120px; display: grid; gap: 13px; }
+  .brow { display: grid; grid-template-columns: 210px 1fr 110px; align-items: center; gap: 14px; font-size: 15px; }
+  .brow .nm { color: #d6d6dc; }
+  .brow .tr { height: 26px; border-radius: 6px; background: rgba(255,255,255,.06); overflow: hidden; }
+  .brow .tr b { display: block; height: 100%; width: 0; border-radius: 6px; background: linear-gradient(90deg, #5b5e6b, #8a8d99); }
+  .brow .pr { font: 600 17px "Space Grotesk", sans-serif; text-align: right; color: #f3f2ee; }
+  .brow.us .nm { color: #fff; font-weight: 700; }
+  .brow.us .tr { outline: 2px solid #ff8a3d; }
+  .brow.us .pr { color: #ff8a3d; font-size: 22px; }
+  .c-foot { position: absolute; left: 60px; bottom: 74px; font-size: 12px; color: #8a8d99; }
+  .three { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 0 90px; gap: 60px; }
+  .three div { text-align: center; }
+  .three small { display: block; font-size: 16px; color: #a9abb8; margin-bottom: 10px; }
+  .three b { font: 700 92px/1 "Space Grotesk", sans-serif; letter-spacing: -0.04em; }
+  .three .us b { color: #ff8a3d; }
+  .tbl { position: absolute; left: 60px; right: 60px; top: 120px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+  .tr2 { display: grid; grid-template-columns: 1.6fr 1fr 1fr; padding: 12px 20px; font-size: 16px; border-top: 1px solid rgba(255,255,255,.08); }
+  .tr2:first-child { border-top: 0; background: rgba(255,255,255,.05); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: #a9abb8; }
+  .tr2 span:not(:first-child) { text-align: center; }
+  .y { color: #4ade80; font-weight: 700; }
+  .pt { color: #fbbf24; font-weight: 600; }
+  .no { color: #f87171; font-weight: 700; }
+  .why { position: absolute; left: 60px; right: 60px; top: 116px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .wcard { padding: 20px; border-radius: 16px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); }
+  .wcard i { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #ff7a2e, #e0367a 60%, #9b6bff); font-style: normal; font-size: 18px; margin-bottom: 12px; }
+  .wcard b { display: block; font: 700 19px "Space Grotesk", sans-serif; margin-bottom: 6px; }
+  .wcard span { font-size: 13px; color: #b9bbc6; line-height: 1.45; }
+
+  /* static comparison (readable, searchable version of the video) */
+  .cmp-wrap { margin-top: 32px; overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .cmp { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 640px; }
+  .cmp th, .cmp td { padding: 12px 14px; text-align: left; border-top: 1px solid var(--line); }
+  .cmp thead th { border-top: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .cmp td.us, .cmp th.us { background: var(--accent-soft); font-weight: 600; }
+  .why-grid { display: grid; gap: 14px; margin-top: 28px; }
+  @media (min-width: 720px) { .why-grid { grid-template-columns: repeat(3, 1fr); } }
+  .why-grid div { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .why-grid b { display: block; font: 700 18px "Space Grotesk", sans-serif; margin-bottom: 6px; }
+  .why-grid p { color: var(--muted); font-size: 14px; }
+  .src { font-size: 12px; color: var(--muted); margin-top: 14px; }
+  .src a { color: var(--muted); }
+
   footer { padding: 32px 0 48px; color: var(--muted); font-size: 14px; text-align: center; }
   footer a { text-decoration: none; color: var(--accent); }
   .dl-thanks { display: none; margin-top: 18px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--accent-soft); color: var(--text); text-align: left; font-size: 14px; line-height: 1.55; }
@@ -273,6 +471,8 @@
   <nav class="wrap">
     <a href="/" class="logo" aria-label="Ganesh Panda — home">ganesh<span>.</span>panda</a>
     <div class="links">
+      <a href="#video" class="hide-sm">Watch guide</a>
+      <a href="#compare" class="hide-sm">Compare</a>
       <a href="#features" class="hide-sm">Features</a>
       <a href="#how" class="hide-sm">How it works</a>
       <a href="#free" class="hide-sm">Pricing</a>
@@ -320,6 +520,301 @@
       </div>
     </div>
   </div>
+
+  <section id="video">
+    <div class="eyebrow">Video guide</div>
+    <h2>Install and use PandaPDF in under a minute.</h2>
+    <div class="vp" id="vp">
+      <div class="vp-stage" id="vpStage">
+        <div class="vp-canvas" id="vpCanvas" aria-hidden="true">
+
+          <!-- 1. Title -->
+          <div class="sc" data-scene="0">
+            <div class="title-wrap">
+              <div class="big-ico pop" data-at="0.1">PDF</div>
+              <div class="t-h fx" data-at="0.5">Panda<em>PDF</em></div>
+              <div class="t-s fx" data-at="0.9">How to install and use it, in under a minute</div>
+              <div class="t-pills fx" data-at="1.4"><span>Windows 10 &amp; 11</span><span>Free</span><span>No account</span></div>
+            </div>
+          </div>
+
+          <!-- 2. Download -->
+          <div class="sc" data-scene="1">
+            <span class="sc-label">Step 1 · Download</span>
+            <div class="win fx" data-at="0" style="left:40px;top:60px;width:880px;height:440px">
+              <div class="win-bar"><span class="ttl">PandaPDF — Ganesh Panda</span><span class="ctl">—  ☐  ✕</span></div>
+              <div class="addr">🔒 ganeshpanda.com/pandapdf</div>
+              <div style="position:absolute;left:70px;top:120px">
+                <div style="font:700 44px/1 'Space Grotesk',sans-serif;letter-spacing:-.03em">Panda<span style="color:#e8590c">PDF</span></div>
+                <div style="margin-top:12px;color:#555;font-size:15px;max-width:380px">Read, organize and protect your PDFs. Fast, private, free.</div>
+              </div>
+              <div class="v-dlbtn">⬇ Install PandaPDF</div>
+            </div>
+            <div class="dl-pop pop" data-at="2.0">
+              <div class="row"><div class="exe">EXE</div><div style="flex:1"><b>PandaPDF-0.17.0-Setup-windows-x64.exe</b><small>44.5 MB</small><div class="bar" style="margin-top:6px"><b data-fill="2.1,3.8"></b></div></div></div>
+              <div class="open fx" data-at="3.9">Open file</div>
+            </div>
+          </div>
+
+          <!-- 3. SmartScreen -->
+          <div class="sc" data-scene="2">
+            <div class="ss fx" data-at="0">
+              <h4>Windows protected your PC</h4>
+              <p>Microsoft Defender SmartScreen prevented an unrecognised app from starting.</p>
+              <div class="more fx on" data-off="1.6">More info</div>
+              <div class="det fx" data-at="1.7">App: PandaPDF-0.17.0-Setup-windows-x64.exe<br>Publisher: Unknown publisher</div>
+              <div class="btns"><span class="alt fx" data-at="1.8">Run anyway</span><span>Don't run</span></div>
+            </div>
+          </div>
+
+          <!-- 4. Setup wizard -->
+          <div class="sc" data-scene="3">
+            <span class="sc-label">Step 2 · Install</span>
+            <div class="win wiz fx" data-at="0">
+              <div class="win-bar"><span class="ttl"><span class="app-ico">PDF</span>Setup - PandaPDF</span><span class="ctl">—  ✕</span></div>
+              <div class="wiz-head">
+                <div><b class="pg-title">License Agreement</b><small>PandaPDF 0.17.0 · installs for your account, no admin needed</small></div>
+                <span class="app-ico" style="width:40px;height:40px;line-height:40px;font-size:12px;border-radius:10px">PDF</span>
+              </div>
+              <div class="wiz-pg fx on" data-off="2.7">
+                <div>Please read the following License Agreement.</div>
+                <div class="lic">MIT License · PandaPDF is based on PdfCraft (MIT OR Apache-2.0).<br><br>Permission is hereby granted, free of charge, to any person obtaining a copy of this software…</div>
+                <div class="chk radio" data-tog="1.0"><i></i>I accept the agreement</div>
+                <div class="chk radio on"><i></i>I do not accept the agreement</div>
+              </div>
+              <div class="wiz-pg fx" data-at="2.8" data-off="5.6">
+                <h5>Select Additional Tasks</h5>
+                <div class="muted">Additional shortcuts:</div>
+                <div class="chk" data-tog="3.6"><i></i>Create a desktop shortcut</div>
+                <div class="muted" style="margin-top:6px">File types:</div>
+                <div class="chk" data-tog="4.3"><i></i>Add PandaPDF to "Open with" for PDF files (keeps your default PDF app)</div>
+              </div>
+              <div class="wiz-pg fx" data-at="5.7" data-off="8.1">
+                <h5>Installing</h5>
+                <div class="muted">Please wait while Setup installs PandaPDF on your computer.</div>
+                <div class="muted" style="margin-top:10px">Extracting files… PandaPDF.exe</div>
+                <div class="bar"><b data-fill="5.8,7.9"></b></div>
+              </div>
+              <div class="wiz-pg fx" data-at="8.2">
+                <h5>Completing the PandaPDF Setup Wizard</h5>
+                <div class="muted">Setup has finished installing PandaPDF on your computer.</div>
+                <div class="chk on" style="margin-top:12px"><i></i>Launch PandaPDF</div>
+              </div>
+              <div class="wiz-foot"><span class="wbtn">&lt; Back</span><span class="wbtn pri" id="wizNext">Next &gt;</span><span class="wbtn">Cancel</span></div>
+            </div>
+          </div>
+
+          <!-- 5. Open a PDF -->
+          <div class="sc" data-scene="4">
+            <div class="win app fx" data-at="0">
+              <div class="win-bar"><span class="ttl"><span class="app-ico">PDF</span>PandaPDF</span><span class="ctl">—  ☐  ✕</span></div>
+              <div class="app-tools"><span>Open</span><span>Save</span><span>Pages</span><span>Combine</span><span>Split</span><span>Protect</span><span>Forms</span></div>
+              <div class="app-body">
+                <div class="empty fx on" data-off="3.0">
+                  <div class="drop"><div style="font-size:30px">📄</div><div><b>Drop a PDF here</b></div><div style="font-size:12px">or press <span class="key">Ctrl</span> + <span class="key">O</span></div></div>
+                </div>
+                <div class="fx" data-at="3.1" style="display:flex;width:100%">
+                  <div class="side"><div class="thumb sel"><i></i><i></i><i style="width:60%"></i></div><div class="thumb"><i></i><i></i></div><div class="thumb"><i></i><i style="width:70%"></i></div><div class="thumb"><i></i><i></i></div></div>
+                  <div class="page"><div class="h"></div><div class="l"></div><div class="l"></div><div class="l" style="width:80%"></div><div class="l"></div><div class="l" style="width:65%"></div><div class="l"></div><div class="l"></div><div class="l" style="width:75%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="file-chip fx" data-at="0.6" data-off="3.0"><div class="exe">PDF</div>Q3-Board-Pack.pdf</div>
+          </div>
+
+          <!-- 6. Search -->
+          <div class="sc" data-scene="5">
+            <div class="win app">
+              <div class="win-bar"><span class="ttl"><span class="app-ico">PDF</span>Q3-Board-Pack.pdf — PandaPDF</span><span class="ctl">—  ☐  ✕</span></div>
+              <div class="app-tools"><span>Open</span><span>Save</span><span>Pages</span><span>Combine</span><span>Split</span><span>Protect</span><span>Forms</span></div>
+              <div class="app-body">
+                <div class="side"><div class="thumb sel"><i></i><i></i><i style="width:60%"></i></div><div class="thumb"><i></i><i></i></div><div class="thumb"><i></i><i style="width:70%"></i></div><div class="thumb"><i></i><i></i></div></div>
+                <div class="page"><div class="h"></div><div class="l"><mark data-tog="2.4" style="left:40px"></mark></div><div class="l"></div><div class="l" style="width:80%"><mark data-tog="2.6" style="left:120px"></mark></div><div class="l"></div><div class="l" style="width:65%"></div><div class="l"><mark data-tog="2.8" style="left:10px"></mark></div><div class="l"></div><div class="l" style="width:75%"></div></div>
+              </div>
+              <div class="search pop" data-at="0.6">🔍 <span class="typed" data-type="1.0" data-text="EBITDA"></span><small class="fx" data-at="2.4">3 of 3</small></div>
+            </div>
+            <div class="pop" data-at="0.2" style="position:absolute;left:60px;bottom:30px;font-size:13px;color:#ddd"><span class="key">Ctrl</span> + <span class="key">F</span></div>
+          </div>
+
+          <!-- 7. Organize pages -->
+          <div class="sc" data-scene="6">
+            <div class="win app">
+              <div class="win-bar"><span class="ttl"><span class="app-ico">PDF</span>Q3-Board-Pack.pdf — PandaPDF</span><span class="ctl">—  ☐  ✕</span></div>
+              <div class="app-tools"><span>Open</span><span>Save</span><span class="hot">Pages</span><span>Combine</span><span>Split</span><span>Protect</span><span>Forms</span></div>
+              <div class="grid-pages">
+                <div class="gp"><i></i><i></i><i style="width:60%"></i><span class="n">1</span></div>
+                <div class="gp"><i></i><i></i><span class="n">2</span></div>
+                <div class="gp rot" data-tog="1.2"><i></i><i style="width:70%"></i><i></i><span class="n">3</span></div>
+                <div class="gp"><i></i><i></i><span class="n">4</span></div>
+                <div class="gp del" data-tog="3.0"><i></i><i style="width:50%"></i><span class="n">5</span></div>
+                <div class="gp"><i></i><i></i><i></i><span class="n">6</span></div>
+              </div>
+              <div class="toast pop" data-at="4.2">Page deleted <b>Undo</b></div>
+            </div>
+          </div>
+
+          <!-- 8. Combine & protect -->
+          <div class="sc" data-scene="7">
+            <span class="sc-label">Combine &amp; protect</span>
+            <div class="merge">
+              <div class="mfile a" data-tog="1.0"><div class="exe">PDF</div>Q3-Board-Pack.pdf</div>
+              <div class="mfile b" data-tog="1.0"><div class="exe">PDF</div>Investor-Update.pdf</div>
+              <div class="mfile c pop" data-at="1.9"><div class="exe">PDF</div><div>Board-Meeting-Pack.pdf<br><small style="font-weight:500;color:#777">links, forms &amp; bookmarks kept</small></div></div>
+            </div>
+            <div class="lock pop" data-at="2.8">
+              <h5>🔒 Protect with password</h5><div style="font-size:12px;color:#666">Strategy-2027-Confidential.pdf</div>
+              <div class="inp"><span data-type="3.3" data-text="••••••••"></span></div>
+              <div class="muted" style="font-size:12px;color:#666">Encryption: AES-256</div>
+              <div class="ok fx" data-at="4.8">✓ Saved. Original bytes kept safe.</div>
+            </div>
+          </div>
+
+          <!-- 9. Outro -->
+          <div class="sc" data-scene="8">
+            <div class="title-wrap">
+              <div class="big-ico pop" data-at="0.1">PDF</div>
+              <div class="t-h fx" data-at="0.4">You're all set.</div>
+              <div class="t-s fx" data-at="0.8">Private by design: no account, no telemetry, no cloud.</div>
+              <div class="t-pills fx" data-at="1.2"><span>Read</span><span>Search</span><span>Organize</span><span>Combine &amp; split</span><span>Protect</span><span>Fill forms</span></div>
+            </div>
+          </div>
+
+          <div class="vp-cursor" id="vpCursor"><svg viewBox="0 0 24 24"><path d="M3 2l7 19 2.6-8.2L21 10z" fill="#fff" stroke="#111" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="vp-cap" id="vpCap"></div>
+        <button class="vp-big" id="vpBig" aria-label="Play video"><span><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span></button>
+      </div>
+      <div class="vp-ctrl">
+        <button class="vp-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>
+        <div class="vp-track" id="vpTrack" role="slider" aria-label="Seek" tabindex="0" aria-valuemin="0"><b id="vpFill"></b></div>
+        <span class="vp-time" id="vpTime">0:00 / 0:54</span>
+      </div>
+      <div class="vp-chapters" id="vpChapters"></div>
+    </div>
+    <p class="vp-note">Animated walkthrough with voiceover and music: tap the video or the speaker button for sound. Screens are simplified illustrations of the real installer and app.</p>
+  </section>
+
+  <section id="compare">
+    <div class="eyebrow">Why PandaPDF</div>
+    <h2>PandaPDF vs paid PDF apps.</h2>
+    <div class="vp" id="vp2">
+      <div class="vp-stage">
+        <div class="vp-canvas" aria-hidden="true">
+
+          <div class="sc">
+            <div class="title-wrap">
+              <div class="big-ico pop" data-at="0.1">PDF</div>
+              <div class="t-h fx" data-at="0.4">Panda<em>PDF</em> vs paid</div>
+              <div class="t-s fx" data-at="0.8">What you get, what you pay, and where each one wins</div>
+            </div>
+          </div>
+
+          <div class="sc">
+            <div class="c-h fx" data-at="0">Price per user, per year</div>
+            <div class="bars">
+              <div class="brow fx" data-at="0.3"><span class="nm">Adobe Acrobat Pro</span><span class="tr"><b data-fill="0.4,2.2,100"></b></span><span class="pr">$239.88</span></div>
+              <div class="brow fx" data-at="0.6"><span class="nm">Nitro PDF Pro</span><span class="tr"><b data-fill="0.7,2.5,75"></b></span><span class="pr">~$180</span></div>
+              <div class="brow fx" data-at="0.9"><span class="nm">Adobe Acrobat Standard</span><span class="tr"><b data-fill="1.0,2.8,75"></b></span><span class="pr">$179.88</span></div>
+              <div class="brow fx" data-at="1.2"><span class="nm">Foxit PDF Editor</span><span class="tr"><b data-fill="1.3,3.1,54"></b></span><span class="pr">$129.99</span></div>
+              <div class="brow fx" data-at="1.5"><span class="nm">Smallpdf Pro</span><span class="tr"><b data-fill="1.6,3.4,45"></b></span><span class="pr">~$108</span></div>
+              <div class="brow fx" data-at="1.8"><span class="nm">Wondershare PDFelement</span><span class="tr"><b data-fill="1.9,3.7,33"></b></span><span class="pr">$79.99</span></div>
+              <div class="brow us pop" data-at="4.2"><span class="nm">PandaPDF</span><span class="tr"><b style="width:1%"></b></span><span class="pr">Free</span></div>
+            </div>
+            <div class="c-foot fx" data-at="2">US list prices, individual annual plans, checked Nov 2026. Prices vary by region and offer.</div>
+          </div>
+
+          <div class="sc">
+            <div class="c-h fx" data-at="0">A 100-person leadership &amp; client team, per year</div>
+            <div class="three">
+              <div class="fx" data-at="0.3"><small>Adobe Acrobat Pro for teams</small><b data-count="0.5,3,28788">$0</b></div>
+              <div class="us pop" data-at="1.6"><small>PandaPDF</small><b>$0</b></div>
+            </div>
+            <div class="c-foot fx" data-at="1">Acrobat Pro for teams at about $23.99 per licence per month, annual plan.</div>
+          </div>
+
+          <div class="sc">
+            <div class="c-h fx" data-at="0">Everyday work for leaders: <em>covered</em></div>
+            <div class="tbl">
+              <div class="tr2"><span>Task</span><span>PandaPDF</span><span>Paid apps</span></div>
+              <div class="tr2 fx" data-at="0.4"><span>Read board packs &amp; search them instantly</span><span class="y">✓</span><span class="y">✓</span></div>
+              <div class="tr2 fx" data-at="0.8"><span>Reorder, rotate &amp; remove pages</span><span class="y">✓</span><span class="y">✓</span></div>
+              <div class="tr2 fx" data-at="1.2"><span>Combine papers into one meeting pack</span><span class="y">✓</span><span class="y">✓</span></div>
+              <div class="tr2 fx" data-at="1.6"><span>Password-protect (up to AES-256)</span><span class="y">✓</span><span class="y">✓</span></div>
+              <div class="tr2 fx" data-at="2.0"><span>Fill forms</span><span class="y">✓</span><span class="y">✓</span></div>
+              <div class="tr2 fx" data-at="2.4"><span>No account, nothing sent to the cloud</span><span class="y">✓</span><span class="pt">Varies</span></div>
+              <div class="tr2 fx" data-at="2.8"><span>Free for every user, no licence fees</span><span class="y">✓</span><span class="no">✕</span></div>
+            </div>
+          </div>
+
+          <div class="sc">
+            <div class="c-h fx" data-at="0">Where paid apps still lead</div>
+            <div class="tbl">
+              <div class="tr2"><span>Task</span><span>PandaPDF</span><span>Paid apps</span></div>
+              <div class="tr2 fx" data-at="0.4"><span>Edit existing text in a PDF</span><span class="pt">Basic</span><span class="y">✓</span></div>
+              <div class="tr2 fx" data-at="0.9"><span>OCR for scanned documents</span><span class="pt">Early</span><span class="y">✓</span></div>
+              <div class="tr2 fx" data-at="1.4"><span>Export to Word with layout kept</span><span class="pt">Basic</span><span class="y">✓</span></div>
+              <div class="tr2 fx" data-at="1.9"><span>Send for e-signature, cloud review</span><span class="no">✕</span><span class="y">✓</span></div>
+            </div>
+            <div class="c-foot fx" data-at="2.6" style="bottom:90px">PandaPDF improves with every release. Choose what fits how you work.</div>
+          </div>
+
+          <div class="sc">
+            <div class="c-h fx" data-at="0">Why leaders choose <em>PandaPDF</em></div>
+            <div class="why">
+              <div class="wcard fx" data-at="0.3"><i>₹</i><b>Free for every seat</b><span>No subscription, no trial, no licence audits. Roll it out to the whole team.</span></div>
+              <div class="wcard fx" data-at="0.8"><i>🔒</i><b>Board-grade privacy</b><span>No account, no telemetry, no cloud. Confidential papers never leave the laptop.</span></div>
+              <div class="wcard fx" data-at="1.3"><i>⚡</i><b>Fast &amp; native</b><span>A lightweight Rust app. Damaged files are repaired instead of crashing.</span></div>
+              <div class="wcard fx" data-at="1.8"><i>✓</i><b>Safe saves</b><span>Every save is incremental and atomic. The original bytes stay intact.</span></div>
+              <div class="wcard fx" data-at="2.3"><i>✦</i><b>Ready for AI agents</b><span>A built-in MCP server and command line let AI agents read, split and combine PDFs.</span></div>
+              <div class="wcard fx" data-at="2.8"><i>✈</i><b>Works offline</b><span>No internet needed. Review board papers on a flight or in a secure room.</span></div>
+            </div>
+          </div>
+
+          <div class="sc">
+            <div class="title-wrap">
+              <div class="big-ico pop" data-at="0.1">PDF</div>
+              <div class="t-h fx" data-at="0.4">Free. Private. <em>Yours.</em></div>
+              <div class="t-s fx" data-at="0.8">Download PandaPDF for Windows</div>
+            </div>
+          </div>
+
+        </div>
+        <div class="vp-cap"></div>
+        <button class="vp-big" aria-label="Play comparison video"><span><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span></button>
+      </div>
+      <div class="vp-ctrl">
+        <button class="vp-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>
+        <div class="vp-track" role="slider" aria-label="Seek" tabindex="0" aria-valuemin="0"><b></b></div>
+        <span class="vp-time">0:00</span>
+      </div>
+      <div class="vp-chapters"></div>
+    </div>
+
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th>Product</th><th>Price (per user, per year, from)</th><th>Paid licence needed</th></tr></thead>
+        <tbody>
+          <tr><td class="us">PandaPDF</td><td class="us">Free</td><td class="us">No, free</td></tr>
+          <tr><td>Adobe Acrobat Pro</td><td>$239.88</td><td>Yes</td></tr>
+          <tr><td>Adobe Acrobat Standard</td><td>$179.88</td><td>Yes</td></tr>
+          <tr><td>Nitro PDF Pro</td><td>~$180 (or ~$270 for a 3-year licence)</td><td>Yes</td></tr>
+          <tr><td>Foxit PDF Editor</td><td>$129.99 (or $209.99 one-time)</td><td>Yes</td></tr>
+          <tr><td>Smallpdf Pro</td><td>~$108</td><td>Yes</td></tr>
+          <tr><td>Wondershare PDFelement</td><td>$79.99 (or $129.99 one-time)</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">US list prices for individual plans, gathered from public pricing guides in November 2026; prices change and vary by region. Check each vendor's site before buying. Adobe, Acrobat, Nitro, Foxit, Smallpdf, Wondershare and PDFelement are trademarks of their respective owners; PandaPDF is not affiliated with them. Sources: <a href="https://xodo.com/blog/adobe-acrobat-pricing-explained" target="_blank" rel="noopener">Acrobat</a>, <a href="https://www.softwareadvice.com/product/174016-Nitro/" target="_blank" rel="noopener">Nitro</a>, <a href="https://dupple.com/pricing/foxit" target="_blank" rel="noopener">Foxit</a>, <a href="https://www.trustradius.com/products/smallpdf/pricing" target="_blank" rel="noopener">Smallpdf</a>, <a href="https://pdfeditify.com/blog/pdfelement-pricing-explained-2026" target="_blank" rel="noopener">PDFelement</a>.</p>
+
+    <div class="why-grid">
+      <div><b>Free for every seat</b><p>No subscription, trial or licence audits. Roll it out to the whole leadership and client team.</p></div>
+      <div><b>Board-grade privacy</b><p>No account, no telemetry, no cloud. Board papers and client files never leave the laptop.</p></div>
+      <div><b>Open and auditable</b><p>Open source under MIT or Apache-2.0, so your security team can review it before rollout.</p></div>
+      <div><b>Fast and dependable</b><p>A native Rust app with safe, incremental saves. Damaged files are repaired instead of crashing.</p></div>
+      <div><b>Ready for AI agents</b><p>A built-in MCP server and command line let your AI assistants read, split and combine PDFs.</p></div>
+      <div><b>Honest about the gaps</b><p>Heavy text editing, OCR, Word export and e-signature workflows are still stronger in paid apps.</p></div>
+    </div>
+  </section>
 
   <section id="features">
     <div class="eyebrow">Features</div>
@@ -424,6 +919,296 @@
       : matchMedia('(prefers-color-scheme: dark)').matches;
     root.dataset.theme = dark ? 'light' : 'dark';
     try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  });
+
+  /* ---------- Background music: a soft ambient loop generated with Web Audio (no audio files) ---------- */
+  const Music = (() => {
+    let ctx, master, timer, step = 0;
+    // Cmaj7 - Am7 - Fmaj7 - G6, one chord every 4 seconds
+    const CHORDS = [[261.63, 329.63, 392.0, 493.88], [220.0, 261.63, 329.63, 392.0], [174.61, 220.0, 261.63, 329.63], [196.0, 246.94, 293.66, 392.0]];
+    function ensure() {
+      if (!ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
+        ctx = new AC(); master = ctx.createGain(); master.gain.value = 0;
+        const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1800;
+        master.connect(lp); lp.connect(ctx.destination);
+      }
+      if (ctx.state === 'suspended') ctx.resume();
+      return true;
+    }
+    function tone(freq, type, at, attack, peak, release) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type; o.frequency.value = freq;
+      g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(peak, at + attack);
+      g.gain.exponentialRampToValueAtTime(0.0001, at + attack + release);
+      o.connect(g); g.connect(master); o.start(at); o.stop(at + attack + release + .05);
+    }
+    function bar() {
+      const now = ctx.currentTime, notes = CHORDS[step++ % CHORDS.length];
+      notes.forEach(f => { tone(f / 2, 'triangle', now, 1.2, .03, 3.6); tone(f, 'sine', now, 1.4, .025, 3.4); });   // pad
+      notes.forEach((f, i) => tone(f * 2, 'sine', now + .25 + i * .5, .02, .035, 1.2));                            // gentle arpeggio
+    }
+    return {
+      start() { if (!ensure()) return; clearInterval(timer); bar(); timer = setInterval(bar, 4000); master.gain.setTargetAtTime(.6, ctx.currentTime, .4); },
+      stop() { if (!ctx) return; clearInterval(timer); master.gain.setTargetAtTime(0, ctx.currentTime, .2); },
+      duck(on) { if (ctx) master.gain.setTargetAtTime(on ? .28 : .6, ctx.currentTime, .3); }
+    };
+  })();
+
+  /* ---------- Voiceover: the browser's own speech engine reads each scene's script ---------- */
+  const Voice = (() => {
+    const synth = window.speechSynthesis;
+    let voice = null, token = 0;
+    function pick() {
+      if (!synth) return null;
+      const en = synth.getVoices().filter(v => /^en/i.test(v.lang));
+      const prefs = [/natural/i, /aria|jenny|guy|neerja|prabhat/i, /google uk english female/i, /google us english/i, /en-in/i, /en-gb/i, /zira/i];
+      for (const r of prefs) { const v = en.find(v => r.test(v.name) || r.test(v.lang)); if (v) return v; }
+      return en[0] || null;
+    }
+    if (synth) { voice = pick(); synth.addEventListener && synth.addEventListener('voiceschanged', () => { voice = pick(); }); }
+    return {
+      ok: !!synth,
+      // calls done() once the line has finished (or was cut off)
+      say(text, done) {
+        if (!synth) { done && done(); return; }
+        const my = ++token; synth.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        if (voice) u.voice = voice; u.rate = 1.02; u.pitch = 1;
+        u.onend = u.onerror = () => { if (my === token && done) done(); };
+        synth.speak(u);
+      },
+      stop() { token++; if (synth) synth.cancel(); }
+    };
+  })();
+
+  const players = [];
+
+  /* ---------- Scripted, seekable animation player (used by both videos) ---------- */
+  function initPlayer(vp, SCENES, opts = {}) {
+    let acc = 0; SCENES.forEach(s => { s.start = acc; acc += s.dur; });
+    const TOTAL = acc;
+    const $ = sel => vp.querySelector(sel);
+    const stage = $('.vp-stage'), canvas = $('.vp-canvas');
+    const scEls = [...canvas.querySelectorAll('.sc')];
+    const cursor = $('.vp-cursor'), cap = $('.vp-cap');
+    const fill = $('.vp-track b'), time = $('.vp-time'), track = $('.vp-track');
+    const playBtn = $('.vp-play'), big = $('.vp-big'), chapWrap = $('.vp-chapters');
+    const PLAY = '<svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg>';
+    const PAUSE = '<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
+    const SOUND_ON = '<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    const SOUND_OFF = '<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9l6 6M22 9l-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+    // Sound: browsers only allow audio after the viewer interacts, so a scroll-triggered
+    // autoplay runs silently until they tap. Narration holds a scene until its line is finished.
+    let unlocked = false, muted = false, spoken = -1, speaking = false;
+    const soundOn = () => unlocked && !muted;
+    const muteBtn = document.createElement('button');
+    muteBtn.className = 'vp-mute'; $('.vp-ctrl').appendChild(muteBtn);
+    const hint = document.createElement('button');
+    hint.className = 'vp-hint'; hint.textContent = '🔊 Tap for sound'; stage.appendChild(hint);
+    function updateSound() {
+      muteBtn.innerHTML = soundOn() ? SOUND_ON : SOUND_OFF;
+      muteBtn.setAttribute('aria-label', soundOn() ? 'Mute voiceover and music' : 'Turn on voiceover and music');
+      vp.classList.toggle('needs-sound', !unlocked);
+    }
+    function soundChanged() {
+      if (soundOn() && playing) { Music.start(); spoken = -1; }
+      else { stopVoice(); speaking = false; Music.stop(); }
+      updateSound();
+    }
+    function unlock() {
+      if (unlocked) return;
+      unlocked = true;
+      // Safari (macOS and iOS) only lets media play from inside a tap, but scenes start their
+      // audio later from the animation loop. Starting the recording silently here, during the
+      // tap, makes Safari allow those later plays.
+      if (rec) {
+        const tok = recToken; rec.muted = true;
+        rec.play().then(() => { if (recToken === tok) rec.pause(); rec.muted = false; }).catch(() => { rec.muted = false; });
+      }
+      soundChanged();
+    }
+    // Recorded voiceover: one MP3 per video, with cue times marking where each scene's line starts.
+    // Falls back to the browser's speech engine if the file can't play.
+    const rec = opts.audio ? new Audio(opts.audio) : null;
+    let recOk = !!rec, recToken = 0;
+    if (rec) { rec.preload = 'auto'; rec.addEventListener('error', () => { recOk = false; }); }
+    function stopVoice() { recToken++; if (rec) rec.pause(); Voice.stop(); }
+    function narrate(i) {
+      spoken = i; speaking = true; Music.duck(true);
+      const done = () => { speaking = false; Music.duck(false); };
+      if (recOk && opts.cues) {
+        const my = ++recToken, from = opts.cues[i], to = opts.cues[i + 1];
+        rec.currentTime = from;
+        rec.play().then(() => {
+          (function watch() {
+            if (my !== recToken) return;
+            if (rec.ended || rec.currentTime >= to - .03) { rec.pause(); done(); return; }
+            // jump over cut phrases (opts.skips: [[from, to], ...] in recording seconds)
+            const cut = (opts.skips || []).find(s => rec.currentTime >= s[0] && rec.currentTime < s[1]);
+            if (cut) rec.currentTime = cut[1];
+            requestAnimationFrame(watch);
+          })();
+        }).catch(() => { if (my !== recToken) return; recOk = false; Voice.say(SCENES[i].say || SCENES[i].cap, done); });
+      } else {
+        Voice.say(SCENES[i].say || SCENES[i].cap, done);
+      }
+    }
+    muteBtn.addEventListener('click', () => { if (!unlocked) { unlocked = true; muted = false; } else muted = !muted; soundChanged(); });
+    hint.addEventListener('click', e => { e.stopPropagation(); unlock(); if (!playing) play(); });
+    updateSound();
+
+    const chapters = SCENES.filter(s => s.chapter);
+    chapters.forEach(s => {
+      const b = document.createElement('button'); b.textContent = s.chapter; b.dataset.t = s.start;
+      b.addEventListener('click', e => { e.stopPropagation(); unlock(); seek(s.start); play(); });
+      chapWrap.appendChild(b);
+      const m = document.createElement('i'); m.style.left = (s.start / TOTAL * 100) + '%'; track.appendChild(m);
+    });
+
+    const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+    const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    const prog = (lt, a, b) => Math.max(0, Math.min(1, (lt - a) / (b - a)));
+
+    let t = 0, playing = false, last = 0, lastClick = -1;
+    function render() {
+      const idx = SCENES.findIndex(s => t >= s.start && t < s.start + s.dur);
+      const i = idx < 0 ? SCENES.length - 1 : idx, s = SCENES[i], lt = t - s.start;
+      scEls.forEach((el, k) => el.classList.toggle('active', k === i));
+      const el = scEls[i];
+      el.querySelectorAll('[data-at]').forEach(n => n.classList.toggle('on', lt >= +n.dataset.at));
+      el.querySelectorAll('[data-off]').forEach(n => n.classList.toggle('gone', lt >= +n.dataset.off));
+      el.querySelectorAll('[data-tog]').forEach(n => n.classList.toggle('on', lt >= +n.dataset.tog));
+      el.querySelectorAll('[data-fill]').forEach(n => { const [a, b, max = 100] = n.dataset.fill.split(',').map(Number); n.style.width = ease(prog(lt, a, b)) * max + '%'; });
+      el.querySelectorAll('[data-type]').forEach(n => { const k = Math.max(0, Math.floor((lt - +n.dataset.type) * 9)); n.textContent = n.dataset.text.slice(0, k); });
+      // data-count="from,to,value": counts up to value between the two scene times
+      el.querySelectorAll('[data-count]').forEach(n => { const [a, b, v] = n.dataset.count.split(',').map(Number); n.textContent = '$' + Math.round(v * ease(prog(lt, a, b))).toLocaleString('en-US'); });
+      if (s.onRender) s.onRender(el, lt);
+      const path = s.cursor;
+      if (path && cursor) {
+        cursor.style.opacity = 1;
+        let a = path[0], b = path[path.length - 1];
+        for (let k = 0; k < path.length - 1; k++) if (lt >= path[k][0] && lt <= path[k + 1][0]) { a = path[k]; b = path[k + 1]; break; }
+        const p = b[0] === a[0] ? 1 : ease(prog(lt, a[0], b[0]));
+        cursor.style.transform = `translate(${a[1] + (b[1] - a[1]) * p}px, ${a[2] + (b[2] - a[2]) * p}px)`;
+        const hit = path.find(c => c[3] && lt >= c[0] && lt < c[0] + .2);
+        const key = hit ? i + ':' + hit[0] : null;
+        if (key && key !== lastClick) { cursor.classList.remove('click'); void cursor.offsetWidth; cursor.classList.add('click'); lastClick = key; }
+      } else if (cursor) cursor.style.opacity = 0;
+      cap.textContent = s.cap;
+      fill.style.width = (t / TOTAL * 100) + '%';
+      time.textContent = fmt(t) + ' / ' + fmt(TOTAL);
+      track.setAttribute('aria-valuenow', Math.round(t)); track.setAttribute('aria-valuemax', TOTAL);
+      const curCh = [...chapters].reverse().find(c => t >= c.start);
+      chapWrap.querySelectorAll('button').forEach(b => b.classList.toggle('cur', !!curCh && +b.dataset.t === curCh.start));
+    }
+    const sceneAt = x => { const k = SCENES.findIndex(s => x >= s.start && x < s.start + s.dur); return k < 0 ? SCENES.length - 1 : k; };
+    function frame(now) {
+      if (!playing) return;
+      let nt = t + (now - last) / 1000; last = now;
+      if (soundOn()) {
+        const i = sceneAt(t), end = SCENES[i].start + SCENES[i].dur;
+        if (i !== spoken) narrate(i);
+        else if (speaking && nt >= end - .05) nt = end - .05;   // hold the scene until its line is finished
+      }
+      t = nt;
+      if (t >= TOTAL) { t = TOTAL - .001; pause(); }
+      render();
+      if (playing) requestAnimationFrame(frame);
+    }
+    function play() {
+      if (playing) return;
+      players.forEach(p => p !== api && p.pause());   // one video speaks at a time
+      if (t >= TOTAL - .01) t = 0;
+      playing = true; spoken = -1; vp.classList.add('playing'); playBtn.innerHTML = PAUSE; playBtn.setAttribute('aria-label', 'Pause');
+      if (soundOn()) Music.start();
+      last = performance.now(); requestAnimationFrame(frame);
+    }
+    function pause() {
+      if (!playing) return;
+      playing = false; vp.classList.remove('playing'); playBtn.innerHTML = PLAY; playBtn.setAttribute('aria-label', 'Play');
+      stopVoice(); speaking = false; Music.stop();
+    }
+    function seek(x) { t = Math.max(0, Math.min(TOTAL - .001, x)); lastClick = -1; spoken = -1; speaking = false; if (playing) stopVoice(); render(); }
+    const api = { pause };
+    players.push(api);
+
+    playBtn.addEventListener('click', () => { unlock(); playing ? pause() : play(); });
+    big.addEventListener('click', () => { unlock(); play(); });
+    stage.addEventListener('click', e => {
+      if (e.target === big || big.contains(e.target)) return;
+      if (playing && !unlocked) { unlock(); return; }   // first tap on a silent autoplay turns the sound on
+      unlock(); playing ? pause() : play();
+    });
+    track.addEventListener('click', e => { unlock(); const r = track.getBoundingClientRect(); seek((e.clientX - r.left) / r.width * TOTAL); });
+    track.addEventListener('keydown', e => { if (e.key === 'ArrowRight') seek(t + 5); if (e.key === 'ArrowLeft') seek(t - 5); if (e.key === ' ') { e.preventDefault(); playing ? pause() : play(); } });
+
+    const fit = () => { canvas.style.transform = `scale(${stage.clientWidth / 960})`; };
+    new ResizeObserver(fit).observe(stage); fit();
+
+    // autoplay once when scrolled into view (not for reduced-motion users)
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let auto = false;
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting && !auto) { auto = true; play(); }
+        else if (!e.isIntersecting && playing) pause();
+      }, { threshold: .5 }).observe(stage);
+    }
+    render();
+  }
+
+  /* ---------- Video 1: install & use ---------- */
+  (() => {
+    const wizNext = document.getElementById('wizNext');
+    // cursor: [time in scene, x, y, click?] in 960x540 canvas units
+    const SCENES = [
+      { dur: 4,  cap: 'PandaPDF: read, organize and protect PDFs on Windows.', say: 'Here\'s how to install and use Panda P D F, in under a minute.' },
+      { dur: 6,  cap: 'Click Install PandaPDF to download the setup file, then open it.', say: 'Step one. Click Install Panda P D F to download the setup file. When it\'s done, open it.', chapter: 'Download',
+        cursor: [[0, 700, 470], [1.3, 205, 340], [1.5, 205, 340, 1], [3.9, 205, 340], [4.6, 685, 188], [4.8, 685, 188, 1], [6, 685, 188]] },
+      { dur: 5,  cap: 'If Windows SmartScreen appears, click More info, then Run anyway.', say: 'If Windows SmartScreen appears, click More info, then Run anyway.',
+        cursor: [[0, 685, 300], [1.1, 245, 238], [1.3, 245, 238, 1], [2.4, 245, 238], [3.4, 578, 463], [3.6, 578, 463, 1], [5, 578, 463]] },
+      { dur: 11, cap: 'Accept the licence, choose shortcuts, and click Install. No admin rights needed.', say: 'Step two. Accept the licence, choose your shortcuts, and click Install. You don\'t need admin rights. Then click Finish to launch Panda P D F.', chapter: 'Install',
+        cursor: [[0, 578, 463], [0.8, 224, 361], [1.0, 224, 361, 1], [1.8, 224, 361], [2.4, 612, 474], [2.6, 612, 474, 1],
+                 [3.2, 224, 275], [3.6, 224, 275, 1], [4.0, 224, 275], [4.1, 224, 340], [4.3, 224, 340, 1], [4.8, 224, 340], [5.3, 612, 474], [5.5, 612, 474, 1],
+                 [8.6, 612, 474], [10.0, 612, 474], [10.2, 612, 474, 1], [11, 612, 474]] },
+      { dur: 6,  cap: 'Drag a PDF into PandaPDF, press Ctrl+O, or right-click a PDF and choose Open with.', say: 'Open your board pack. Drag it in, press Control O, or right-click the file and choose Open with.', chapter: 'Open a PDF',
+        cursor: [[0, 840, 480], [0.6, 840, 480], [2.2, 420, 280], [3.4, 420, 280], [6, 480, 322]] },
+      { dur: 5,  cap: 'Press Ctrl+F and type. Results highlight as you type.', say: 'Press Control F and type. Every mention of EBITDA lights up as you type.', chapter: 'Search',
+        cursor: [[0, 480, 300], [5, 480, 300]] },
+      { dur: 6,  cap: 'Rotate, delete and move pages. Undo works even after you save.', say: 'Reorganise the pack. Rotate, delete and move pages. Undo works, even after you save.', chapter: 'Organize pages',
+        cursor: [[0, 480, 300], [0.9, 411, 257], [1.1, 411, 257, 1], [2.4, 411, 257], [2.8, 685, 257], [3.0, 685, 257, 1], [4.6, 685, 257], [5.0, 525, 469], [6, 525, 469]] },
+      { dur: 6,  cap: 'Combine PDFs into one, split them apart, or lock a file with a password.', say: 'Combine the board pack and investor update into one meeting pack, and lock confidential strategy papers with a password.', chapter: 'Combine & protect',
+        cursor: [[0, 480, 470], [6, 480, 470]] },
+      { dur: 5,  cap: 'Free. Your documents never leave your computer.', say: 'That\'s it. Panda P D F is free, and your documents never leave your computer.' }
+    ];
+    // setup wizard: page titles, button labels and the licence radio follow the script
+    SCENES[3].onRender = (el, lt) => {
+      el.querySelectorAll('.radio')[1].classList.toggle('on', lt < 1.0);
+      el.querySelector('.pg-title').textContent = lt < 2.7 ? 'License Agreement' : lt < 5.6 ? 'Select Additional Tasks' : lt < 8.1 ? 'Installing' : 'Setup complete';
+      wizNext.textContent = lt < 2.7 ? 'Next >' : lt < 5.6 ? 'Install' : lt < 8.1 ? 'Next >' : 'Finish';
+    };
+    initPlayer(document.getElementById('vp'), SCENES, {
+      audio: '/audio/pandapdf-install-voiceover.mp3',
+      // where each scene's line starts in the recording (seconds), plus the recording's end
+      cues: [0, 5.29, 11.55, 16.67, 27.01, 34.53, 40.03, 47.01, 55.13, 60.24]
+    });
+  })();
+
+  /* ---------- Video 2: PandaPDF vs paid PDF apps ---------- */
+  initPlayer(document.getElementById('vp2'), [
+    { dur: 3.5, cap: 'How does free PandaPDF compare with the paid PDF apps?', say: 'How does free Panda P D F compare with the paid PDF apps?' },
+    { dur: 8,   cap: 'Paid PDF apps cost $80 to $240 a year. PandaPDF is free.', say: 'Paid PDF apps cost between eighty and two hundred and forty dollars, per user, every year. Panda P D F is free.', chapter: 'Price' },
+    { dur: 5,   cap: 'Rolling out to a 100-person team? Acrobat Pro for teams is about $28,788 a year. PandaPDF: $0.', say: 'Rolling it out to a hundred-person leadership and client team? Acrobat Pro for teams costs about twenty-eight thousand, eight hundred dollars a year. Panda P D F costs nothing.' },
+    { dur: 7,   cap: 'For everyday PDF work, PandaPDF does what you need.', say: 'For everyday leadership work, reading and searching board packs, reorganising pages, building meeting packs, passwords and forms, Panda P D F has you covered. Privately, with no account.', chapter: 'Features' },
+    { dur: 6.5, cap: 'Honest gaps: for heavy text editing, OCR or e-signature workflows, paid apps still lead.', say: 'To be fair, paid apps still lead on heavy text editing, OCR for scanned documents, Word export, and e-signature workflows.', chapter: 'Honest gaps' },
+    { dur: 9,   cap: 'Free, private, fast, safe, and built for AI agents.', say: 'So why do leaders choose Panda P D F? It\'s free for every seat, private by design, fast and safe, and ready for AI agents.', chapter: 'Why PandaPDF' },
+    { dur: 4,   cap: 'Download PandaPDF free for Windows.', say: 'Download Panda P D F, free, for Windows.' }
+  ], {
+    audio: '/audio/pandapdf-compare-voiceover.mp3',
+    cues: [0, 4.41, 13.15, 25.11, 38.53, 48.05, 58.95, 62.08],
+    // the phrase "open source," in the Why scene is left out of the recording's playback
+    skips: [[55.32, 56.47]]
   });
 
   document.querySelectorAll('.dl-btn').forEach((btn) => {
